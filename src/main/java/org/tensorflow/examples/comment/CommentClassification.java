@@ -1,9 +1,6 @@
 package org.tensorflow.examples.comment;
 
-import org.tensorflow.Graph;
-import org.tensorflow.Session;
-import org.tensorflow.Tensor;
-import org.tensorflow.TensorFlow;
+import org.tensorflow.*;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -27,13 +24,41 @@ public class CommentClassification {
 
     private Graph g;
     private Session s;
+    SavedModelBundle ss;
 
     public CommentClassification(String modelpath) {
         //加载模型文件
-        byte[] graphDef = readAllBytesOrExit(Paths.get(modelpath, "graph.pb"));
-        g = new Graph();
-        g.importGraphDef(graphDef);
-        s = new Session(g);
+//        byte[] graphDef = readAllBytesOrExit(Paths.get("/opt/develop/workspace/sohu/NFM/tensorflow_java/model/comment_1", "graph.pb"));
+//        byte[] graphDef2 = readAllBytesOrExit(Paths.get(modelpath, "graph.pb"));
+//        g = new Graph();
+//        g.importGraphDef(graphDef);
+//
+//        s = new Session(g);
+        ss = SavedModelBundle.load("/opt/develop/workspace/sohu/NFM/tensorflow_java/model/comment_1");
+        ss = SavedModelBundle.load(modelpath + "_2");
+        ss = SavedModelBundle.load(modelpath + "_1");
+        ss = SavedModelBundle.load(modelpath + "_2");
+        ss = SavedModelBundle.load(modelpath + "_1");
+        ss = SavedModelBundle.load(modelpath + "_2");
+        ss = SavedModelBundle.load(modelpath + "_1");
+        ss = SavedModelBundle.load(modelpath + "_2");
+        ss = SavedModelBundle.load(modelpath + "_1");
+        ss = SavedModelBundle.load(modelpath + "_2");
+        ss = SavedModelBundle.load(modelpath + "_1");
+        ss = SavedModelBundle.load(modelpath + "_2");
+        ss = SavedModelBundle.load(modelpath + "_1");
+        ss = SavedModelBundle.load(modelpath + "_2");
+        ss = SavedModelBundle.load(modelpath + "_2");
+        ss = SavedModelBundle.load(modelpath + "_1");
+        ss = SavedModelBundle.load(modelpath + "_2");
+        ss = SavedModelBundle.load(modelpath + "_1");
+        ss = SavedModelBundle.load(modelpath + "_1");
+        ss = SavedModelBundle.load(modelpath + "_2");
+        ss = SavedModelBundle.load(modelpath + "_1");
+        ss = SavedModelBundle.load(modelpath + "_2");
+        ss = SavedModelBundle.load(modelpath + "_1");
+        ss = SavedModelBundle.load(modelpath + "_2");
+        ss = SavedModelBundle.load(modelpath + "_1");
     }
 
     private static byte[] readAllBytesOrExit(Path path) {
@@ -55,6 +80,7 @@ public class CommentClassification {
                 .feed("input_train_label", labels)
                 .feed("input_phase", phase)
                 .fetch("output").run();
+
         Tensor<Float> result = result1.get(0).expect(Float.class);
         final long[] rshape = result.shape();
         if (result.numDimensions() != 2 || rshape[0] != 1) {
@@ -67,25 +93,6 @@ public class CommentClassification {
         return result.copyTo(new float[1][nlabels])[0];
     }
 
-
-    //    public void classification(String comment) {
-//
-//
-//        int len = 1065;
-//        int[] floats = new int[len];
-//        String inputs = "0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0";
-//        String[] eles = inputs.split(",");
-//        for (int i = 0; i < len; i++) {
-//            floats[i] = (int) Float.parseFloat(eles[i]);
-//        }
-//        long[] floats_shape = {1, len};
-//        Tensor<Integer> t = Tensor.create(floats_shape, IntBuffer.wrap(floats));
-//
-//        float[] res = execute(t);
-//        for (float node : res) {
-//            System.out.println(node);
-//        }
-//    }
     public void classification3(String path, int thread_num) {
 //        String path = "data/2018-03-05_03-15";
         BufferedReader reader = null;
@@ -243,6 +250,13 @@ public class CommentClassification {
                 Tensor<Float> input_train_label_tf = Tensor.create(shape3, FloatBuffer.wrap(input_train_label));
                 Tensor input_phase_tf = Tensor.create(input_phase);
                 float[] res = execute2(features_tf, input_dropout_tf, input_train_label_tf, input_phase_tf);
+                features_tf.close();
+                input_dropout_tf.close();
+                input_train_label_tf.close();
+                input_phase_tf.close();
+                System.out.println("close");
+                s.close();
+                g.close();
 //                System.out.println(res[0]);
                 if (i % 100000 == 99999) {
                     long time2 = System.currentTimeMillis();
@@ -257,14 +271,14 @@ public class CommentClassification {
     }
 
     public static void main(String[] args) {
-//        String path = "data/2018-03-05_03-15";
+        String path = "data/2018-03-05_03-15";
 //        int thread_num = 2;
-        String path=args[0];
-        int thread_num = Integer.parseInt(args[1]);
+//        String path = args[0];
+//        int thread_num = Integer.parseInt(args[1]);
 
-        CommentClassification commentClassification = new CommentClassification("model/comment_1");
+        CommentClassification commentClassification = new CommentClassification("model/comment");
 //        commentClassification.classification("if you sometimes like to go to the movies to have fun , wasabi is a good place to start . ");
-        commentClassification.classification3(path, thread_num);
-//        commentClassification.classification(path);
+//        commentClassification.classification3(path, thread_num);
+        commentClassification.classification(path);
     }
 }
